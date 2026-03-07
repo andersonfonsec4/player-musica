@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>WaveTune</title>
+
+    <link rel="stylesheet" href="style.css" />
+
+    <script src="https://cdn.jsdelivr.net/npm/jsmediatags@3.9.7/dist/jsmediatags.min.js"></script>
+  </head>
+
+  <body>
+    <header class="header">
+      <img src="assets/logo.svg" class="logo" />
+
+      <h1>WaveTune</h1>
+
+      <button id="fullscreen">⛶</button>
+    </header>
+
+    <canvas id="particles"></canvas>
+
+    <div class="app">
+      <div class="playlist">
+        <ul id="playlist"></ul>
+      </div>
+
+      <div class="player">
+        <canvas id="visualizer"></canvas>
+
+        <h2 id="title">Nenhuma música carregada</h2>
+
+        <p id="artist"></p>
+
+        <div class="time">
+          <span id="current">0:00</span>
+
+          <span>/</span>
+
+          <span id="duration">0:00</span>
+        </div>
+
+        <div class="progress-container" id="progress-container">
+          <div id="progress"></div>
+        </div>
+
+        <div class="controls">
+          <button id="prev">⏮</button>
+          <button id="play">▶</button>
+          <button id="next">⏭</button>
+        </div>
+
+        <label for="upload" class="upload-btn"> Adicionar músicas </label>
+
+        <input type="file" id="upload" multiple hidden accept="audio/*" />
+      </div>
+    </div>
+
+    <audio id="audio"></audio>
+
+    <div class="signature">Anderson Fonseca</div>
+
+    <script src="script.js"></script>
+  </body>
+</html>
