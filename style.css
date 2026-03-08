@@ -83,10 +83,6 @@ header {
   font-size: 14px;
 }
 
-.playlist li:active {
-  cursor: grabbing;
-}
-
 .playlist li:hover {
   background: rgba(37, 99, 235, 0.15);
   border-left-color: var(--accent);
@@ -107,25 +103,6 @@ header {
   opacity: 1;
 }
 
-/* SCROLLBAR DISCRETA */
-
-.playlist::-webkit-scrollbar {
-  width: 6px;
-}
-
-.playlist::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-.playlist::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.15);
-  border-radius: 10px;
-}
-
-.playlist::-webkit-scrollbar-thumb:hover {
-  background: rgba(255, 255, 255, 0.25);
-}
-
 /* PLAYER */
 
 .player {
@@ -142,6 +119,8 @@ header {
 .player h2 {
   margin: 0;
   font-size: 28px;
+  max-width: 80%;
+  word-break: break-word;
 }
 
 .player p {
@@ -204,17 +183,7 @@ header {
   cursor: pointer;
 }
 
-/* FOOTER */
-
-.signature {
-  position: fixed;
-  bottom: 15px;
-  right: 25px;
-  opacity: 0.4;
-  font-size: 12px;
-}
-
-/* RESPONSIVE */
+/* MOBILE */
 
 @media (max-width: 900px) {
   .container {
@@ -227,8 +196,19 @@ header {
     border-right: none;
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
   }
+}
 
-  li.dragging {
-    opacity: 0.4;
+/* LANDSCAPE */
+
+@media (max-width: 900px) and (orientation: landscape) {
+  .container {
+    flex-direction: row;
+  }
+
+  .playlist {
+    width: 40%;
+    height: 100%;
+    border-right: 1px solid rgba(255, 255, 255, 0.1);
+    border-bottom: none;
   }
 }
