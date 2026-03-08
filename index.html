@@ -4,47 +4,43 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <title>WaveTune</title>
+    <meta
+      name="description"
+      content="WaveTune - Player de música profissional"
+    />
+    <meta name="theme-color" content="#2563eb" />
+
+    <title>WaveTune - Player de Música</title>
 
     <link rel="stylesheet" href="style.css" />
-
-    <script src="https://cdn.jsdelivr.net/npm/jsmediatags@3.9.7/dist/jsmediatags.min.js"></script>
+    <link rel="manifest" href="manifest.json" />
   </head>
 
   <body>
-    <header class="header">
-      <img src="assets/logo.svg" class="logo" />
-
-      <h1>WaveTune</h1>
-
-      <button id="fullscreen">⛶</button>
-    </header>
-
-    <canvas id="particles"></canvas>
-
-    <div class="app">
-      <div class="playlist">
-        <ul id="playlist"></ul>
+    <header>
+      <div class="logo">
+        <div class="logo-icon">~</div>
+        <h1>WaveTune</h1>
       </div>
 
-      <div class="player">
-        <canvas id="visualizer"></canvas>
+      <button id="fullscreenBtn">⛶</button>
+    </header>
 
+    <div class="container">
+      <aside class="playlist">
+        <ul id="playlist"></ul>
+      </aside>
+
+      <main class="player">
         <h2 id="title">Nenhuma música carregada</h2>
-
-        <p id="artist"></p>
+        <p id="artist">Local</p>
 
         <div class="time">
-          <span id="current">0:00</span>
-
-          <span>/</span>
-
+          <span id="current">0:00</span> /
           <span id="duration">0:00</span>
         </div>
 
-        <div class="progress-container" id="progress-container">
-          <div id="progress"></div>
-        </div>
+        <input type="range" id="progress" min="0" max="100" value="0" />
 
         <div class="controls">
           <button id="prev">⏮</button>
@@ -52,16 +48,24 @@
           <button id="next">⏭</button>
         </div>
 
-        <label for="upload" class="upload-btn"> Adicionar músicas </label>
+        <label class="add">
+          Adicionar músicas
 
-        <input type="file" id="upload" multiple hidden accept="audio/*" />
-      </div>
+          <input type="file" id="fileInput" accept="audio/*" multiple hidden />
+        </label>
+      </main>
     </div>
 
-    <audio id="audio"></audio>
+    <footer>
+      <p class="signature">Anderson Fonseca</p>
+    </footer>
 
-    <div class="signature">Anderson Fonseca</div>
+    <script src="script.js" defer></script>
 
-    <script src="script.js"></script>
+    <script>
+      if ("serviceWorker" in navigator) {
+        navigator.serviceWorker.register("sw.js");
+      }
+    </script>
   </body>
 </html>

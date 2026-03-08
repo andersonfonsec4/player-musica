@@ -1,15 +1,8 @@
 {
-  "name": "WaveTune",
+  "name": "WaveTune Player",
   "short_name": "WaveTune",
-  "start_url": ".",
+  "start_url": "./index.html",
   "display": "standalone",
-  "background_color": "#000000",
-  "theme_color": "#0078D4",
-  "icons": [
-    {
-      "src": "assets/logo.svg",
-      "sizes": "192x192",
-      "type": "image/png"
-    }
-  ]
+  "background_color": "#0a0a0a",
+  "theme_color": "#2563eb"
 }
