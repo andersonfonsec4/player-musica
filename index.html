@@ -1,67 +1,96 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="pt-BR">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<head>
 
-    <title>WaveTune</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <link rel="stylesheet" href="style.css" />
+<title>WaveTune</title>
 
-    <script src="https://cdn.jsdelivr.net/npm/jsmediatags@3.9.7/dist/jsmediatags.min.js"></script>
-  </head>
+<link rel="stylesheet" href="style.css">
 
-  <body>
-    <header class="header">
-      <img src="assets/logo.svg" class="logo" />
+</head>
 
-      <h1>WaveTune</h1>
+<body>
 
-      <button id="fullscreen">⛶</button>
-    </header>
+<header>
 
-    <canvas id="particles"></canvas>
+<div class="logo">
 
-    <div class="app">
-      <div class="playlist">
-        <ul id="playlist"></ul>
-      </div>
+<div class="logo-icon">~</div>
 
-      <div class="player">
-        <canvas id="visualizer"></canvas>
+<h1>WaveTune</h1>
 
-        <h2 id="title">Nenhuma música carregada</h2>
+</div>
 
-        <p id="artist"></p>
+<button id="fullscreenBtn">⛶</button>
 
-        <div class="time">
-          <span id="current">0:00</span>
+</header>
 
-          <span>/</span>
 
-          <span id="duration">0:00</span>
-        </div>
+<div class="container">
 
-        <div class="progress-container" id="progress-container">
-          <div id="progress"></div>
-        </div>
+<aside class="playlist">
 
-        <div class="controls">
-          <button id="prev">⏮</button>
-          <button id="play">▶</button>
-          <button id="next">⏭</button>
-        </div>
+<ul id="playlist"></ul>
 
-        <label for="upload" class="upload-btn"> Adicionar músicas </label>
+</aside>
 
-        <input type="file" id="upload" multiple hidden accept="audio/*" />
-      </div>
-    </div>
 
-    <audio id="audio"></audio>
+<main class="player">
 
-    <div class="signature">Anderson Fonseca</div>
+<h2 id="title">Nenhuma música carregada</h2>
 
-    <script src="script.js"></script>
-  </body>
+<p id="artist">Local</p>
+
+<div class="time">
+
+<span id="current">0:00</span>
+
+/
+
+<span id="duration">0:00</span>
+
+</div>
+
+<div class="progress-container">
+
+<div id="progress"></div>
+
+</div>
+
+
+<div class="controls">
+
+<button id="prev">⏮</button>
+
+<button id="play">▶</button>
+
+<button id="next">⏭</button>
+
+</div>
+
+<label class="add">
+
+Adicionar músicas
+
+<input type="file" id="fileInput" multiple hidden>
+
+</label>
+
+</main>
+
+</div>
+
+
+<div class="signature">
+
+Anderson Fonseca
+
+</div>
+
+<script src="script.js"></script>
+
+</body>
+
 </html>

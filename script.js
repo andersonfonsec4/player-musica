@@ -1,348 +1,318 @@
-/* =========================
-   ELEMENTOS
-========================= */
+const audio = new Audio()
 
-const audio = document.getElementById("audio");
+const playlistUI = document.getElementById("playlist")
+const title = document.getElementById("title")
+const current = document.getElementById("current")
+const duration = document.getElementById("duration")
 
-const playBtn = document.getElementById("play");
-const prevBtn = document.getElementById("prev");
-const nextBtn = document.getElementById("next");
+const progress = document.getElementById("progress")
+const progressContainer = document.querySelector(".progress-container")
 
-const progress = document.getElementById("progress");
-const progressContainer = document.getElementById("progress-container");
+const playBtn = document.getElementById("play")
+const prevBtn = document.getElementById("prev")
+const nextBtn = document.getElementById("next")
 
-const title = document.getElementById("title");
-const artist = document.getElementById("artist");
+const fileInput = document.getElementById("fileInput")
+const fullscreenBtn = document.getElementById("fullscreenBtn")
 
-const current = document.getElementById("current");
-const duration = document.getElementById("duration");
+let playlist = []
+let index = 0
 
-const upload = document.getElementById("upload");
 
-const playlistUI = document.getElementById("playlist");
+/* ---------------- PLAYLIST ---------------- */
 
-const visualizer = document.getElementById("visualizer");
+function savePlaylist(){
 
-const ctx = visualizer.getContext("2d");
+localStorage.setItem("wavetune_playlist",
+JSON.stringify(playlist.map(s => ({title:s.title})))
+)
 
-visualizer.width = 460;
-visualizer.height = 160;
-
-/* =========================
-   VARIÁVEIS
-========================= */
-
-let playlist = [];
-let index = 0;
-let isPlaying = false;
-
-let audioContext;
-let analyser;
-let source;
-let dataArray;
-
-/* =========================
-   FORMATO TEMPO
-========================= */
-
-function formatTime(sec) {
-  const minutes = Math.floor(sec / 60);
-  const seconds = Math.floor(sec % 60);
-
-  return minutes + ":" + (seconds < 10 ? "0" + seconds : seconds);
 }
 
-/* =========================
-   CARREGAR MÚSICA
-========================= */
+function renderPlaylist(){
 
-function loadMusic(i) {
-  const track = playlist[i];
+playlistUI.innerHTML=""
 
-  audio.src = track.url;
+playlist.forEach((song,i)=>{
 
-  title.textContent = track.title;
-  artist.textContent = track.artist;
+const li=document.createElement("li")
 
-  document
-    .querySelectorAll(".playlist li")
-    .forEach((li) => li.classList.remove("active"));
-  document.querySelectorAll(".playlist li")[i]?.classList.add("active");
+li.textContent=song.title
+
+li.draggable=true
+
+if(i===index){
+li.classList.add("active")
 }
 
-/* =========================
-   PLAY
-========================= */
 
-function playMusic() {
-  audio.play();
+/* tocar musica */
 
-  playBtn.textContent = "⏸";
+li.onclick=()=>{
 
-  isPlaying = true;
+index=i
+loadMusic(index)
+playMusic()
+
 }
 
-/* =========================
-   PAUSE
-========================= */
 
-function pauseMusic() {
-  audio.pause();
+/* excluir musica */
 
-  playBtn.textContent = "▶";
+li.ondblclick=()=>{
 
-  isPlaying = false;
+if(confirm("Excluir música da playlist?")){
+
+playlist.splice(i,1)
+
+if(index>=playlist.length){
+index=playlist.length-1
 }
 
-/* =========================
-   CONTROLES
-========================= */
+renderPlaylist()
+savePlaylist()
 
-playBtn.onclick = () => {
-  if (isPlaying) pauseMusic();
-  else playMusic();
-};
-
-nextBtn.onclick = () => {
-  index++;
-
-  if (index >= playlist.length) index = 0;
-
-  loadMusic(index);
-  playMusic();
-};
-
-prevBtn.onclick = () => {
-  index--;
-
-  if (index < 0) index = playlist.length - 1;
-
-  loadMusic(index);
-  playMusic();
-};
-
-/* =========================
-   TEMPO
-========================= */
-
-audio.addEventListener("timeupdate", () => {
-  const progressPercent = (audio.currentTime / audio.duration) * 100;
-
-  progress.style.width = progressPercent + "%";
-
-  current.textContent = formatTime(audio.currentTime);
-});
-
-audio.addEventListener("loadedmetadata", () => {
-  duration.textContent = formatTime(audio.duration);
-});
-
-/* =========================
-   CLIQUE PROGRESSO
-========================= */
-
-progressContainer.onclick = (e) => {
-  const width = progressContainer.clientWidth;
-  const clickX = e.offsetX;
-
-  audio.currentTime = (clickX / width) * audio.duration;
-};
-
-/* =========================
-   AUTO NEXT
-========================= */
-
-audio.onended = () => {
-  nextBtn.click();
-};
-
-/* =========================
-   PLAYLIST UI
-========================= */
-
-function renderPlaylist() {
-  playlistUI.innerHTML = "";
-
-  playlist.forEach((song, i) => {
-    const li = document.createElement("li");
-
-    li.draggable = true;
-
-    li.innerHTML = `
-<div class="song-cover">~</div>
-<span>${song.title}</span>
-`;
-
-    li.onclick = () => {
-      index = i;
-
-      loadMusic(index);
-      playMusic();
-    };
-
-    li.addEventListener("dragstart", () => {
-      li.classList.add("dragging");
-    });
-
-    li.addEventListener("dragend", () => {
-      li.classList.remove("dragging");
-    });
-
-    playlistUI.appendChild(li);
-  });
 }
 
-/* =========================
-   DRAG PLAYLIST
-========================= */
-
-playlistUI.addEventListener("dragover", (e) => {
-  e.preventDefault();
-
-  const dragging = document.querySelector(".dragging");
-
-  const after = [...playlistUI.querySelectorAll("li:not(.dragging)")];
-
-  const next = after.find((li) => {
-    return e.clientY <= li.offsetTop + li.offsetHeight / 2;
-  });
-
-  playlistUI.insertBefore(dragging, next);
-});
-
-/* =========================
-   UPLOAD MÚSICAS
-========================= */
-
-upload.onchange = (e) => {
-  const files = [...e.target.files];
-
-  files.forEach((file) => {
-    const url = URL.createObjectURL(file);
-
-    const song = {
-      url,
-      title: file.name,
-      artist: "Desconhecido",
-    };
-
-    playlist.push(song);
-  });
-
-  renderPlaylist();
-
-  if (playlist.length && !isPlaying) {
-    loadMusic(0);
-    playMusic();
-  }
-};
-
-/* =========================
-   FULLSCREEN
-========================= */
-
-document.getElementById("fullscreen").onclick = () => {
-  if (!document.fullscreenElement) {
-    document.documentElement.requestFullscreen();
-  } else {
-    document.exitFullscreen();
-  }
-};
-
-/* =========================
-   VISUALIZER
-========================= */
-
-function initAudio() {
-  audioContext = new AudioContext();
-
-  analyser = audioContext.createAnalyser();
-
-  source = audioContext.createMediaElementSource(audio);
-
-  source.connect(analyser);
-  analyser.connect(audioContext.destination);
-
-  analyser.fftSize = 256;
-
-  const bufferLength = analyser.frequencyBinCount;
-
-  dataArray = new Uint8Array(bufferLength);
-
-  draw();
 }
 
-audio.onplay = () => {
-  if (!audioContext) {
-    initAudio();
-  }
-};
 
-/* =========================
-   DESENHAR ONDAS
-========================= */
+/* drag start */
 
-function draw() {
-  requestAnimationFrame(draw);
+li.addEventListener("dragstart",()=>{
 
-  analyser.getByteFrequencyData(dataArray);
+li.classList.add("dragging")
 
-  ctx.clearRect(0, 0, visualizer.width, visualizer.height);
+})
 
-  let barWidth = 4;
-  let x = 0;
 
-  for (let i = 0; i < dataArray.length; i++) {
-    let barHeight = dataArray[i] / 2;
+/* drag end */
 
-    ctx.fillStyle = "#0078D4";
+li.addEventListener("dragend",()=>{
 
-    ctx.fillRect(x, visualizer.height - barHeight, barWidth, barHeight);
+li.classList.remove("dragging")
 
-    x += barWidth + 1;
-  }
+})
+
+
+playlistUI.appendChild(li)
+
+})
+
 }
 
-/* =========================
-   PARTICULAS
-========================= */
 
-const particleCanvas = document.getElementById("particles");
-const pctx = particleCanvas.getContext("2d");
+/* drag reorder */
 
-particleCanvas.width = window.innerWidth;
-particleCanvas.height = window.innerHeight;
+playlistUI.addEventListener("dragover",(e)=>{
 
-let particles = [];
+e.preventDefault()
 
-for (let i = 0; i < 80; i++) {
-  particles.push({
-    x: Math.random() * particleCanvas.width,
-    y: Math.random() * particleCanvas.height,
-    r: Math.random() * 2,
-  });
+const dragging=document.querySelector(".dragging")
+
+const afterElement=getDragAfterElement(playlistUI,e.clientY)
+
+if(afterElement==null){
+
+playlistUI.appendChild(dragging)
+
+}else{
+
+playlistUI.insertBefore(dragging,afterElement)
+
 }
 
-function drawParticles() {
-  pctx.clearRect(0, 0, particleCanvas.width, particleCanvas.height);
+})
 
-  pctx.fillStyle = "#0078D4";
 
-  particles.forEach((p) => {
-    pctx.beginPath();
+function getDragAfterElement(container,y){
 
-    pctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+const elements=[...container.querySelectorAll("li:not(.dragging)")]
 
-    pctx.fill();
+return elements.reduce((closest,child)=>{
 
-    p.y -= 0.2;
+const box=child.getBoundingClientRect()
 
-    if (p.y < 0) {
-      p.y = particleCanvas.height;
-    }
-  });
+const offset=y-box.top-box.height/2
 
-  requestAnimationFrame(drawParticles);
+if(offset<0 && offset>closest.offset){
+
+return{offset:offset,element:child}
+
+}else{
+
+return closest
+
 }
 
-drawParticles();
+},{offset:Number.NEGATIVE_INFINITY}).element
+
+}
+
+
+/* ---------------- AUDIO ---------------- */
+
+function loadMusic(i){
+
+if(!playlist[i]) return
+
+audio.src=playlist[i].src
+title.textContent=playlist[i].title
+
+renderPlaylist()
+
+}
+
+
+function playMusic(){
+
+audio.play()
+playBtn.textContent="⏸"
+
+}
+
+
+function pauseMusic(){
+
+audio.pause()
+playBtn.textContent="▶"
+
+}
+
+
+playBtn.onclick=()=>{
+
+if(audio.paused){
+playMusic()
+}else{
+pauseMusic()
+}
+
+}
+
+
+/* NEXT */
+
+nextBtn.onclick=()=>{
+
+index++
+
+if(index>=playlist.length) index=0
+
+loadMusic(index)
+playMusic()
+
+}
+
+
+/* PREV */
+
+prevBtn.onclick=()=>{
+
+index--
+
+if(index<0) index=playlist.length-1
+
+loadMusic(index)
+playMusic()
+
+}
+
+
+/* ---------------- FILE INPUT ---------------- */
+
+fileInput.addEventListener("change",(e)=>{
+
+const files=[...e.target.files]
+
+files.forEach(file=>{
+
+playlist.push({
+
+title:file.name,
+src:URL.createObjectURL(file)
+
+})
+
+})
+
+renderPlaylist()
+savePlaylist()
+
+if(playlist.length && !audio.src){
+
+loadMusic(0)
+playMusic()
+
+}
+
+})
+
+
+/* ---------------- TIME ---------------- */
+
+audio.addEventListener("timeupdate",()=>{
+
+const percent=(audio.currentTime/audio.duration)*100
+
+progress.style.width=percent+"%"
+
+current.textContent=formatTime(audio.currentTime)
+duration.textContent=formatTime(audio.duration)
+
+})
+
+
+function formatTime(time){
+
+if(isNaN(time)) return "0:00"
+
+const min=Math.floor(time/60)
+const sec=Math.floor(time%60)
+
+return `${min}:${sec<10?"0":""}${sec}`
+
+}
+
+
+/* SEEK */
+
+progressContainer.onclick=(e)=>{
+
+const width=progressContainer.clientWidth
+const click=e.offsetX
+
+audio.currentTime=(click/width)*audio.duration
+
+}
+
+
+/* AUTO NEXT */
+
+audio.addEventListener("ended",()=>{
+
+index++
+
+if(index>=playlist.length) index=0
+
+loadMusic(index)
+playMusic()
+
+})
+
+
+/* ---------------- FULLSCREEN ---------------- */
+
+fullscreenBtn.onclick=()=>{
+
+if(!document.fullscreenElement){
+
+document.documentElement.requestFullscreen()
+
+}else{
+
+document.exitFullscreen()
+
+}
+
+}
