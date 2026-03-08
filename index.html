@@ -1,9 +1,7 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="pt-BR">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
+<<<<<<< HEAD
     <meta
       name="description"
       content="WaveTune - Player de música profissional"
@@ -41,13 +39,41 @@
         </div>
 
         <input type="range" id="progress" min="0" max="100" value="0" />
+=======
+<head>
 
-        <div class="controls">
-          <button id="prev">⏮</button>
-          <button id="play">▶</button>
-          <button id="next">⏭</button>
-        </div>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+<title>WaveTune</title>
+
+<link rel="stylesheet" href="style.css">
+
+<link rel="manifest" href="manifest.json">
+
+<meta name="theme-color" content="#2563eb">
+
+</head>
+
+<body>
+
+
+<header>
+
+<div class="logo">
+
+<div class="logo-icon">~</div>
+
+<h1>WaveTune</h1>
+
+</div>
+
+<button id="fullscreenBtn">⛶</button>
+>>>>>>> 708a93a8cac53781fd5b083496c818b04f116ccf
+
+</header>
+
+<<<<<<< HEAD
         <label class="add">
           Adicionar músicas
 
@@ -69,3 +95,86 @@
     </script>
   </body>
 </html>
+=======
+
+<div class="container">
+
+<aside class="playlist">
+
+<ul id="playlist"></ul>
+
+</aside>
+
+
+<main class="player">
+
+<h2 id="title">Nenhuma música carregada</h2>
+
+<p id="artist">Local</p>
+
+<div class="time">
+
+<span id="current">0:00</span>
+
+/
+
+<span id="duration">0:00</span>
+
+</div>
+
+<div class="progress-container">
+
+<div id="progress"></div>
+
+</div>
+
+
+<div class="controls">
+
+<button id="prev">⏮</button>
+
+<button id="play">▶</button>
+
+<button id="next">⏭</button>
+
+</div>
+
+
+<label class="add">
+
+Adicionar músicas
+
+<input type="file" id="fileInput" multiple hidden>
+
+</label>
+
+</main>
+
+</div>
+
+
+<div class="signature">
+
+Anderson Fonseca
+
+</div>
+
+
+<script src="script.js"></script>
+
+
+<script>
+
+if ("serviceWorker" in navigator) {
+
+navigator.serviceWorker.register("sw.js")
+
+}
+
+</script>
+
+
+</body>
+
+</html>
+>>>>>>> 708a93a8cac53781fd5b083496c818b04f116ccf
