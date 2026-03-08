@@ -72,9 +72,14 @@ const player = {
 
       li.draggable = true;
 
-      li.innerHTML = `${song.title}<span class="delete">✖</span>`;
+      li.innerHTML = `
+${song.title}
+<span class="delete">✖</span>
+`;
 
-      if (i === this.index) li.classList.add("active");
+      if (i === this.index) {
+        li.classList.add("active");
+      }
 
       li.addEventListener("click", () => {
         this.index = i;
@@ -82,12 +87,18 @@ const player = {
         this.play();
       });
 
-      li.querySelector(".delete").addEventListener("click", (e) => {
+      const deleteBtn = li.querySelector(".delete");
+
+      deleteBtn.addEventListener("click", (e) => {
         e.stopPropagation();
 
         URL.revokeObjectURL(this.playlist[i].src);
 
         this.playlist.splice(i, 1);
+
+        if (this.index >= this.playlist.length) {
+          this.index = this.playlist.length - 1;
+        }
 
         this.render();
       });
@@ -114,11 +125,8 @@ const player = {
 
   load(i) {
     audio.src = this.playlist[i].src;
-
     elements.title.textContent = this.playlist[i].title;
-
     elements.progress.value = 0;
-
     elements.current.textContent = "0:00";
 
     this.render();
@@ -142,17 +150,13 @@ const player = {
 
   next() {
     this.index = (this.index + 1) % this.playlist.length;
-
     this.load(this.index);
-
     this.play();
   },
 
   prev() {
     this.index = (this.index - 1 + this.playlist.length) % this.playlist.length;
-
     this.load(this.index);
-
     this.play();
   },
 
@@ -162,7 +166,6 @@ const player = {
 
   updateProgress() {
     const percent = (audio.currentTime / audio.duration) * 100;
-
     elements.progress.value = percent;
 
     elements.current.textContent = this.format(audio.currentTime);
@@ -172,7 +175,6 @@ const player = {
     if (!t) return "0:00";
 
     const m = Math.floor(t / 60);
-
     const s = Math.floor(t % 60)
       .toString()
       .padStart(2, "0");
@@ -188,3 +190,12 @@ const player = {
 };
 
 player.init();
+
+function fixHeight() {
+  document.body.style.height = window.innerHeight + "px";
+}
+
+window.addEventListener("resize", fixHeight);
+window.addEventListener("orientationchange", fixHeight);
+
+fixHeight();

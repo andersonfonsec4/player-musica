@@ -10,15 +10,18 @@
   box-sizing: border-box;
 }
 
+html,
 body {
   margin: 0;
+  height: 100%;
+}
+
+body {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
   background: linear-gradient(135deg, var(--bg1), var(--bg2));
   color: white;
-  height: 100vh;
   display: flex;
   flex-direction: column;
-  overflow: hidden;
 }
 
 /* HEADER */
@@ -27,7 +30,7 @@ header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 18px 28px;
+  padding: 18px 24px;
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
 }
 
@@ -53,7 +56,7 @@ header {
 .container {
   flex: 1;
   display: flex;
-  overflow: hidden;
+  min-height: 0;
 }
 
 /* PLAYLIST */
@@ -95,8 +98,8 @@ header {
 
 .delete {
   color: var(--danger);
+  cursor: pointer;
   opacity: 0;
-  transition: 0.25s;
 }
 
 .playlist li:hover .delete {
@@ -111,9 +114,9 @@ header {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 16px;
   text-align: center;
   padding: 40px;
+  gap: 16px;
 }
 
 .player h2 {
@@ -124,37 +127,21 @@ header {
 }
 
 .player p {
-  margin: 0;
   opacity: 0.7;
+  margin: 0;
 }
-
-/* PROGRESS */
 
 #progress {
   width: 80%;
   max-width: 500px;
-  appearance: none;
   height: 6px;
   background: rgba(255, 255, 255, 0.15);
   border-radius: 6px;
 }
 
-#progress::-webkit-slider-thumb {
-  appearance: none;
-  width: 14px;
-  height: 14px;
-  border-radius: 50%;
-  background: var(--accent);
-  margin-top: -4px;
-  cursor: pointer;
-}
-
-/* CONTROLS */
-
 .controls {
   display: flex;
   gap: 18px;
-  margin-top: 10px;
 }
 
 .controls button {
@@ -166,14 +153,7 @@ header {
   color: white;
   font-size: 20px;
   cursor: pointer;
-  transition: 0.2s;
 }
-
-.controls button:hover {
-  transform: scale(1.06);
-}
-
-/* ADD */
 
 .add {
   margin-top: 20px;
@@ -200,7 +180,7 @@ header {
 
 /* LANDSCAPE */
 
-@media (max-width: 900px) and (orientation: landscape) {
+@media (orientation: landscape) and (max-width: 900px) {
   .container {
     flex-direction: row;
   }
